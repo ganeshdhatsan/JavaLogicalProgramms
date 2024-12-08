@@ -1,0 +1,88 @@
+
+--1. Calculate the total salary of all employees.
+SELECT SUM(SALARY) AS Total_Salary FROM employees;
+
+--2. Find the average salary of employees working in department 90.
+SELECT AVG(SALARY) AS Average_Salary 
+FROM employees 
+WHERE DEPARTMENT_ID = 90;
+
+--3. Find the highest and lowest salaries in the employees table.
+SELECT MAX(SALARY) AS Highest_Salary, MIN(SALARY) AS Lowest_Salary 
+FROM employees;
+
+--4. Count how many employees are working in each department.
+SELECT DEPARTMENT_ID, COUNT(*) AS Employee_Count
+FROM employees
+GROUP BY DEPARTMENT_ID;
+
+--5. Find the total salary paid to employees in each job role.
+SELECT JOB_ID, SUM(SALARY) AS Total_Salary
+FROM employees
+GROUP BY JOB_ID;
+
+--6. Determine the average salary of employees who have worked in department 50 in their job history.
+SELECT AVG(e.SALARY) AS Average_Salary
+FROM employees e
+JOIN job_history jh ON e.EMPLOYEE_ID = jh.EMPLOYEE_ID
+WHERE jh.DEPARTMENT_ID = 50;
+
+--7. Find the total number of employees who have worked in each department across job history.
+SELECT DEPARTMENT_ID, COUNT(DISTINCT EMPLOYEE_ID) AS Employee_Count
+FROM job_history
+GROUP BY DEPARTMENT_ID;
+
+--8. Identify the job with the highest number of employees currently working.
+SELECT JOB_ID, COUNT(*) AS Employee_Count
+FROM employees
+GROUP BY JOB_ID
+ORDER BY Employee_Count DESC
+FETCH FIRST 1 ROWS ONLY;
+
+--9. List the departments along with the total and average salaries of employees working in them.
+SELECT DEPARTMENT_ID, SUM(SALARY) AS Total_Salary, AVG(SALARY) AS Average_Salary
+FROM employees
+GROUP BY DEPARTMENT_ID;
+
+--10. Find the number of employees who are earning a salary greater than the average salary of their job role.
+SELECT e.JOB_ID, COUNT(*) AS Above_Average_Employees
+FROM employees e
+JOIN (
+    SELECT JOB_ID, AVG(SALARY) AS Avg_Salary
+    FROM employees
+    GROUP BY JOB_ID
+) job_avg ON e.JOB_ID = job_avg.JOB_ID
+WHERE e.SALARY > job_avg.Avg_Salary
+GROUP BY e.JOB_ID;
+
+--11. Calculate the difference between the maximum and minimum salary for each job role.
+SELECT JOB_ID, MAX(SALARY) - MIN(SALARY) AS Salary_Range
+FROM employees
+GROUP BY JOB_ID;
+
+--12. Determine which employees have a salary higher than the maximum salary allowed for their job role in the jobs table.
+SELECT e.EMPLOYEE_ID, e.FIRST_NAME, e.LAST_NAME, e.SALARY, j.MAX_SALARY
+FROM employees e
+JOIN jobs j ON e.JOB_ID = j.JOB_ID
+WHERE e.SALARY > j.MAX_SALARY;
+
+--13. Find the total duration (in days) employees have worked in each department in their job history.
+SELECT DEPARTMENT_ID, SUM(TO_DATE(END_DATE, 'DD-MM-YY') - TO_DATE(START_DATE, 'DD-MM-YY')) AS Total_Days_Worked
+FROM job_history
+GROUP BY DEPARTMENT_ID;
+
+--14. Calculate the number of employees who do not have a manager assigned.
+SELECT COUNT(*) AS No_Manager_Count
+FROM employees
+WHERE MANAGER_ID IS NULL;
+
+--15. Find the department with the highest total salary from both current employees and historical data.
+SELECT DEPARTMENT_ID, SUM(SALARY) AS Total_Salary
+FROM (
+    SELECT DEPARTMENT_ID, SALARY FROM employees
+    UNION ALL
+    SELECT DEPARTMENT_ID, 0 AS SALARY FROM job_history
+)
+GROUP BY DEPARTMENT_ID
+ORDER BY Total_Salary DESC
+FETCH FIRST 1 ROWS ONLY;

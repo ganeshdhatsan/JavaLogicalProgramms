@@ -1,0 +1,141 @@
+--1. Scalar Subquery
+--Question: Find employees whose salary is higher than the average salary of all employees.
+SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, SALARY
+FROM employees
+WHERE SALARY > (SELECT AVG(SALARY) FROM employees);
+
+--2. Subquery in FROM Clause
+--Question: Find the department-wise maximum salary and list employees earning that maximum salary.
+SELECT e.EMPLOYEE_ID, e.FIRST_NAME, e.SALARY, e.DEPARTMENT_ID
+FROM employees e
+WHERE e.SALARY = (
+    SELECT MAX(SALARY)
+    FROM employees e2
+    WHERE e.DEPARTMENT_ID = e2.DEPARTMENT_ID
+);
+--3. Correlated Subquery
+--Question: List employees who are earning more than the average salary of their department.
+SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, SALARY, DEPARTMENT_ID
+FROM employees e1
+WHERE SALARY > (
+    SELECT AVG(SALARY)
+    FROM employees e2
+    WHERE e1.DEPARTMENT_ID = e2.DEPARTMENT_ID
+);
+--4. Subquery with EXISTS
+--Question: Find employees who have any historical job records in the job_history table.
+SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME
+FROM employees e
+WHERE EXISTS (
+    SELECT 1
+    FROM job_history jh
+    WHERE e.EMPLOYEE_ID = jh.EMPLOYEE_ID
+);
+--5. Subquery with NOT EXISTS
+--Question: Find employees who do not have any entry in the job_history table.
+SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME
+FROM employees e
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM job_history jh
+    WHERE e.EMPLOYEE_ID = jh.EMPLOYEE_ID
+);
+--6. Subquery with IN
+--Question: Find employees who have worked in department 110 according to the job_history table.
+SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME
+FROM employees
+WHERE EMPLOYEE_ID IN (
+    SELECT EMPLOYEE_ID
+    FROM job_history
+    WHERE DEPARTMENT_ID = 110
+);
+--7. Nested Subqueries
+--Question: Find the job title of the highest-paid employee in the company.
+SELECT JOB_TITLE
+FROM jobs
+WHERE JOB_ID = (
+    SELECT JOB_ID
+    FROM employees
+    WHERE SALARY = (SELECT MAX(SALARY) FROM employees)
+);
+
+--8. Subquery with ALL
+--Question: Find employees whose salary is greater than the salary of every employee in department 60.
+SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, SALARY
+FROM employees
+WHERE SALARY > ALL (
+    SELECT SALARY
+    FROM employees
+    WHERE DEPARTMENT_ID = 60
+);
+
+--9. Subquery with ANY
+--Question: Find employees whose salary is greater than at least one employee in department 90.
+SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, SALARY
+FROM employees
+WHERE SALARY > ANY (
+    SELECT SALARY
+    FROM employees
+    WHERE DEPARTMENT_ID = 90
+);
+
+--10. Inline View
+--Question: Find the average salary of each department and list employees who are earning above their department's average salary.
+SELECT e.EMPLOYEE_ID, e.FIRST_NAME, e.SALARY, e.DEPARTMENT_ID
+FROM employees e
+JOIN (
+    SELECT DEPARTMENT_ID, AVG(SALARY) AS Avg_Salary
+    FROM employees
+    GROUP BY DEPARTMENT_ID
+) dept_avg ON e.DEPARTMENT_ID = dept_avg.DEPARTMENT_ID
+WHERE e.SALARY > dept_avg.Avg_Salary;
+
+--11. Subquery in SELECT Clause
+--Question: Show employees and the number of historical jobs they have held.
+SELECT e.EMPLOYEE_ID, e.FIRST_NAME, e.LAST_NAME,
+       (SELECT COUNT(*) 
+        FROM job_history jh 
+        WHERE e.EMPLOYEE_ID = jh.EMPLOYEE_ID) AS Job_History_Count
+FROM employees e;
+
+--12. Correlated Subquery for Date Comparison
+--Question: Find employees whose hire date is earlier than the start date of any of their historical job records.
+SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, HIRE_DATE
+FROM employees e
+WHERE HIRE_DATE < (
+    SELECT MIN(START_DATE)
+    FROM job_history jh
+    WHERE e.EMPLOYEE_ID = jh.EMPLOYEE_ID
+);
+
+--13. Subquery for Job History Aggregation
+--Question: Find employees who have worked in more than 2 departments in the job_history table.
+SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME
+FROM employees
+WHERE EMPLOYEE_ID IN (
+    SELECT EMPLOYEE_ID
+    FROM job_history
+    GROUP BY EMPLOYEE_ID
+    HAVING COUNT(DISTINCT DEPARTMENT_ID) > 2
+);
+
+--14. Find Employees Without Matching Jobs
+--Question: List employees whose current job is not listed in the jobs table.
+SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, JOB_ID
+FROM employees
+WHERE JOB_ID NOT IN (
+    SELECT JOB_ID
+    FROM jobs
+);
+
+--15. Complex Subquery with Aggregation
+--Question: Find the department with the highest total salary and list all employees in that department.
+SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, DEPARTMENT_ID
+FROM employees
+WHERE DEPARTMENT_ID = (
+    SELECT DEPARTMENT_ID
+    FROM employees
+    GROUP BY DEPARTMENT_ID
+    ORDER BY SUM(SALARY) DESC
+    FETCH FIRST 1 ROW ONLY
+);

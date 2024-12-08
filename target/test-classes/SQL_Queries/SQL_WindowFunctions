@@ -1,0 +1,91 @@
+--1. Assign a unique rank to each employee based on their salary in descending order (use RANK).
+SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, SALARY,
+       RANK() OVER (ORDER BY SALARY DESC) AS Salary_Rank
+FROM employees;
+
+--2. Find the dense rank of employees' salaries by department (use DENSE_RANK).
+SELECT EMPLOYEE_ID, FIRST_NAME, DEPARTMENT_ID, SALARY,
+       DENSE_RANK() OVER (PARTITION BY DEPARTMENT_ID ORDER BY SALARY DESC) AS Salary_Dense_Rank
+FROM employees;
+
+--3. List employees with their row number within each job role (use ROW_NUMBER).
+SELECT EMPLOYEE_ID, FIRST_NAME, JOB_ID, SALARY,
+       ROW_NUMBER() OVER (PARTITION BY JOB_ID ORDER BY SALARY DESC) AS Row_Number
+FROM employees;
+
+--4. Find the total number of employees in each department and add this as a column for each employee (use COUNT).
+SELECT EMPLOYEE_ID, FIRST_NAME, DEPARTMENT_ID, 
+       COUNT(*) OVER (PARTITION BY DEPARTMENT_ID) AS Department_Employee_Count
+FROM employees;
+
+--5. Calculate the cumulative salary within each department (use SUM).
+SELECT EMPLOYEE_ID, FIRST_NAME, DEPARTMENT_ID, SALARY,
+       SUM(SALARY) OVER (PARTITION BY DEPARTMENT_ID ORDER BY SALARY DESC) AS Cumulative_Salary
+FROM employees;
+
+--6. Identify the lead (next highest) and lag (next lowest) salaries for each employee (use LEAD and LAG).
+SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, SALARY,
+       LEAD(SALARY) OVER (ORDER BY SALARY DESC) AS Next_Highest_Salary,
+       LAG(SALARY) OVER (ORDER BY SALARY DESC) AS Previous_Lowest_Salary
+FROM employees;
+
+--7. Determine the hire date difference between consecutive employees based on hire date (use LAG).
+SELECT EMPLOYEE_ID, FIRST_NAME, HIRE_DATE,
+       HIRE_DATE - LAG(HIRE_DATE) OVER (ORDER BY HIRE_DATE) AS Days_Between_Hires
+FROM employees;
+
+--8. Rank employees by salary within each job role and filter only the top 3 earners per job (use RANK and WHERE).
+SELECT EMPLOYEE_ID, FIRST_NAME, JOB_ID, SALARY,
+       RANK() OVER (PARTITION BY JOB_ID ORDER BY SALARY DESC) AS Salary_Rank
+FROM employees
+WHERE RANK() OVER (PARTITION BY JOB_ID ORDER BY SALARY DESC) <= 3;
+
+--9. List employees with their cumulative count of hires within each department (use COUNT).
+SELECT EMPLOYEE_ID, FIRST_NAME, DEPARTMENT_ID,
+       COUNT(*) OVER (PARTITION BY DEPARTMENT_ID ORDER BY HIRE_DATE) AS Cumulative_Hires
+FROM employees;
+
+--10. Determine the maximum salary in each department and assign it to all rows in that department (use MAX).
+SELECT EMPLOYEE_ID, FIRST_NAME, DEPARTMENT_ID, SALARY,
+       MAX(SALARY) OVER (PARTITION BY DEPARTMENT_ID) AS Max_Department_Salary
+FROM employees;
+
+--11. Find the gap in salaries within each department using the difference between the current salary and the previous one (use LAG).
+SELECT EMPLOYEE_ID, FIRST_NAME, DEPARTMENT_ID, SALARY,
+       SALARY - LAG(SALARY) OVER (PARTITION BY DEPARTMENT_ID ORDER BY SALARY DESC) AS Salary_Gap
+FROM employees;
+
+--12. Identify employees who have changed jobs and calculate the number of distinct jobs they held (use COUNT).
+SELECT EMPLOYEE_ID,
+       COUNT(DISTINCT JOB_ID) OVER (PARTITION BY EMPLOYEE_ID) AS Total_Job_Changes
+FROM job_history;
+
+--13. Assign a rank to employees based on the number of departments they have worked in (use RANK with COUNT).
+SELECT EMPLOYEE_ID, 
+       COUNT(DISTINCT DEPARTMENT_ID) OVER (PARTITION BY EMPLOYEE_ID) AS Total_Departments_Worked,
+       RANK() OVER (ORDER BY COUNT(DISTINCT DEPARTMENT_ID) OVER (PARTITION BY EMPLOYEE_ID) DESC) AS Department_Rank
+FROM job_history;
+
+--14. Track salary progression for employees using job history (use LEAD to find the next salary).
+SELECT EMPLOYEE_ID, JOB_ID, START_DATE, END_DATE,
+       SALARY AS Current_Salary,
+       LEAD(SALARY) OVER (PARTITION BY EMPLOYEE_ID ORDER BY START_DATE) AS Next_Salary
+FROM job_history;
+
+--15. Find employees with their maximum salary and their current job title using window functions (use MAX).
+SELECT e.EMPLOYEE_ID, e.FIRST_NAME, e.LAST_NAME, e.JOB_ID, e.SALARY,
+       MAX(e.SALARY) OVER (PARTITION BY e.EMPLOYEE_ID) AS Max_Salary,
+       j.JOB_TITLE
+FROM employees e
+JOIN jobs j ON e.JOB_ID = j.JOB_ID;
+
+--16. Calculate the running total salary for employees, ordered by hire date (use SUM).
+SELECT EMPLOYEE_ID, FIRST_NAME, HIRE_DATE, SALARY,
+       SUM(SALARY) OVER (ORDER BY HIRE_DATE) AS Running_Total_Salary
+FROM employees;
+
+--17. Rank departments based on their total salaries (use SUM and RANK).
+SELECT DEPARTMENT_ID,
+       SUM(SALARY) OVER (PARTITION BY DEPARTMENT_ID) AS Total_Department_Salary,
+       RANK() OVER (ORDER BY SUM(SALARY) OVER (PARTITION BY DEPARTMENT_ID) DESC) AS Salary_Rank
+FROM employees;

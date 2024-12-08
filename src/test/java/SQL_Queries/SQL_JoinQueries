@@ -1,0 +1,107 @@
+--1. INNER JOIN
+--Question: List all employees with their job titles.
+sql
+Copy code
+SELECT e.EMPLOYEE_ID, e.FIRST_NAME, e.LAST_NAME, e.JOB_ID, j.JOB_TITLE
+FROM employees e
+INNER JOIN jobs j ON e.JOB_ID = j.JOB_ID;
+
+--2. INNER JOIN with Multiple Conditions
+--Question: List employees who worked in department 90 and their current job title.
+SELECT e.EMPLOYEE_ID, e.FIRST_NAME, e.LAST_NAME, e.DEPARTMENT_ID, j.JOB_TITLE
+FROM employees e
+INNER JOIN jobs j ON e.JOB_ID = j.JOB_ID
+WHERE e.DEPARTMENT_ID = 90;
+
+--3. LEFT OUTER JOIN
+--Question: List all employees and include any missing job details if the job ID doesn't exist in the jobs table.
+SELECT e.EMPLOYEE_ID, e.FIRST_NAME, e.LAST_NAME, e.JOB_ID, j.JOB_TITLE
+FROM employees e
+LEFT OUTER JOIN jobs j ON e.JOB_ID = j.JOB_ID;
+
+--4. RIGHT OUTER JOIN
+--Question: List all job titles and include employees assigned to those jobs, even if no one is assigned.
+SELECT e.EMPLOYEE_ID, e.FIRST_NAME, e.LAST_NAME, j.JOB_ID, j.JOB_TITLE
+FROM employees e
+RIGHT OUTER JOIN jobs j ON e.JOB_ID = j.JOB_ID;
+
+--5. FULL OUTER JOIN
+--Question: Combine the employees and job_history tables to list all employees and all job histories, even if no match exists.
+SELECT e.EMPLOYEE_ID, e.FIRST_NAME, e.JOB_ID AS Current_Job_ID,
+       jh.JOB_ID AS Historical_Job_ID, jh.DEPARTMENT_ID AS Historical_Department
+FROM employees e
+FULL OUTER JOIN job_history jh ON e.EMPLOYEE_ID = jh.EMPLOYEE_ID;
+
+--6. SELF JOIN
+--Question: List all employees along with their manager's details (assuming MANAGER_ID references EMPLOYEE_ID in the same table).
+SELECT e.EMPLOYEE_ID AS Employee_ID, e.FIRST_NAME AS Employee_Name, 
+       m.EMPLOYEE_ID AS Manager_ID, m.FIRST_NAME AS Manager_Name
+FROM employees e
+LEFT JOIN employees m ON e.MANAGER_ID = m.EMPLOYEE_ID;
+
+--7. CROSS JOIN
+--Question: Create all possible combinations of employees and job titles.
+SELECT e.EMPLOYEE_ID, e.FIRST_NAME, j.JOB_ID, j.JOB_TITLE
+FROM employees e
+CROSS JOIN jobs j;
+
+--8. INNER JOIN with Aggregate
+--Question: Find the total salary paid for each job title.
+SELECT j.JOB_TITLE, SUM(e.SALARY) AS Total_Salary
+FROM employees e
+INNER JOIN jobs j ON e.JOB_ID = j.JOB_ID
+GROUP BY j.JOB_TITLE;
+
+--9. OUTER JOIN with IS NULL
+--Question: Find employees who do not have any entry in the job_history table.
+SELECT e.EMPLOYEE_ID, e.FIRST_NAME, e.LAST_NAME
+FROM employees e
+LEFT OUTER JOIN job_history jh ON e.EMPLOYEE_ID = jh.EMPLOYEE_ID
+WHERE jh.EMPLOYEE_ID IS NULL;
+
+--10. INNER JOIN with Date Comparison
+--Question: Find employees whose hire date is earlier than the start date of any of their job history records.
+SELECT e.EMPLOYEE_ID, e.FIRST_NAME, e.HIRE_DATE, jh.START_DATE
+FROM employees e
+INNER JOIN job_history jh ON e.EMPLOYEE_ID = jh.EMPLOYEE_ID
+WHERE e.HIRE_DATE < jh.START_DATE;
+
+--11. SELF JOIN with Department
+--Question: List all pairs of employees working in the same department.
+SELECT e1.EMPLOYEE_ID AS Employee1_ID, e1.FIRST_NAME AS Employee1_Name, 
+       e2.EMPLOYEE_ID AS Employee2_ID, e2.FIRST_NAME AS Employee2_Name, 
+       e1.DEPARTMENT_ID
+FROM employees e1
+INNER JOIN employees e2 
+ON e1.DEPARTMENT_ID = e2.DEPARTMENT_ID AND e1.EMPLOYEE_ID != e2.EMPLOYEE_ID;
+
+--12. CROSS JOIN with Filter
+--Question: Create all possible combinations of employees and job titles, but filter out combinations where the job title matches the employee's actual job.
+SELECT e.EMPLOYEE_ID, e.FIRST_NAME, e.JOB_ID AS Employee_Job_ID, j.JOB_ID AS Cross_Job_ID, j.JOB_TITLE
+FROM employees e
+CROSS JOIN jobs j
+WHERE e.JOB_ID != j.JOB_ID;
+
+--13. FULL OUTER JOIN with Aggregation
+--Question: Find the total number of employees and job records (both current and historical) in each department.
+SELECT COALESCE(e.DEPARTMENT_ID, jh.DEPARTMENT_ID) AS Department_ID,
+       COUNT(e.EMPLOYEE_ID) AS Current_Employees,
+       COUNT(jh.EMPLOYEE_ID) AS Historical_Records
+FROM employees e
+FULL OUTER JOIN job_history jh ON e.DEPARTMENT_ID = jh.DEPARTMENT_ID
+GROUP BY COALESCE(e.DEPARTMENT_ID, jh.DEPARTMENT_ID);
+
+--14. INNER JOIN with Multiple Joins
+--Question: List employees, their current job titles, and any historical job roles they have held.
+SELECT e.EMPLOYEE_ID, e.FIRST_NAME, e.LAST_NAME, e.JOB_ID AS Current_Job, 
+       j.JOB_TITLE AS Current_Job_Title, jh.JOB_ID AS Historical_Job
+FROM employees e
+INNER JOIN jobs j ON e.JOB_ID = j.JOB_ID
+LEFT JOIN job_history jh ON e.EMPLOYEE_ID = jh.EMPLOYEE_ID;
+
+--15. RIGHT OUTER JOIN with NULL Check
+--Question: Find all jobs that have not been assigned to any employee.
+SELECT j.JOB_ID, j.JOB_TITLE
+FROM employees e
+RIGHT OUTER JOIN jobs j ON e.JOB_ID = j.JOB_ID
+WHERE e.JOB_ID IS NULL;
