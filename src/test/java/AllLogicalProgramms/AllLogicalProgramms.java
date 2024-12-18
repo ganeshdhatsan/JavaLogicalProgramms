@@ -536,7 +536,19 @@ public class AllLogicalProgramms {
 	    // Print the final result
 	    System.out.println(result);
 	}
-
+	@Test
+	private void reverseGivenLongStringWithSpace() {
+		String given ="I love India.I work in IT MNC.I work in IT wipro";
+	    String ans = "";
+	    String[] splits=given.split("\\.");
+	    for(int i=splits.length-1;i>=0;i--){
+	      ans = ans+splits[i];
+	      if(i!=0){
+	        ans = ans+".";
+	      }
+	    }
+	    System.out.println(ans);
+	}
 
 	// 21
 	private void swappingTheGivenString() {
@@ -1127,7 +1139,7 @@ public class AllLogicalProgramms {
 			System.out.println(entry.getKey() + ": " + entry.getValue());
 		}
 	}
-
+	
 	/////////////////////// character programms ////////////////////////////////////////
 
 	private void validateBelow() {
