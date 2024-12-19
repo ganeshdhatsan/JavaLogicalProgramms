@@ -95,32 +95,32 @@ public class AllLogicalProgramms {
 			System.out.println(ans[i]);
 		}
 	}
-	
-	private void removeDuplicateChractersInString(){
+
+	private void removeDuplicateChractersInString() {
 		String name = "selenium";
-	    char[] given = name.toCharArray();
-	    char[] result = new char[given.length]; // Use char[] instead of int[] for storing characters
-	    int count = 0;
+		char[] given = name.toCharArray();
+		char[] result = new char[given.length]; // Use char[] instead of int[] for storing characters
+		int count = 0;
 
-	    for (int i = 0; i < given.length; i++) {
-	        boolean ans = false;
-	        for (int j = 0; j < count; j++) {
-	            if (given[i] == result[j]) {
-	                ans = true; // Mark as duplicate if the character already exists in result
-	                break;
-	            }
-	        }
-	        if (!ans) { // If not a duplicate, add the character to result
-	            result[count] = given[i];
-	            count++;
-	        }
-	    }
+		for (int i = 0; i < given.length; i++) {
+			boolean ans = false;
+			for (int j = 0; j < count; j++) {
+				if (given[i] == result[j]) {
+					ans = true; // Mark as duplicate if the character already exists in result
+					break;
+				}
+			}
+			if (!ans) { // If not a duplicate, add the character to result
+				result[count] = given[i];
+				count++;
+			}
+		}
 
-	    // Print unique characters
-	    for (int i = 0; i < count; i++) {
-	        System.out.println(result[i]);
-	        
-	    }
+		// Print unique characters
+		for (int i = 0; i < count; i++) {
+			System.out.println(result[i]);
+
+		}
 	}
 
 	private void getTheDuplicateValuesFromGivenSingleArray() {
@@ -160,14 +160,15 @@ public class AllLogicalProgramms {
 		}
 
 	}
-@Test
+
+	@Test
 	private void sortTheGivenArrayInAscendingOrder() {
 		int[] arr = { 0, 1, -1, 0, 1, 0, 1, 1, 1, 0 };
 		int tmp = 0;
 
 		for (int i = 0; i < arr.length; i++) {
 
-			for (int j = i+0 ; j < arr.length; j++) {
+			for (int j = i + 0; j < arr.length; j++) {
 
 				if (arr[i] > arr[j]) {
 					tmp = arr[i];
@@ -183,14 +184,14 @@ public class AllLogicalProgramms {
 
 	}
 
-@Test
+	@Test
 	private void sortTheGivenArrayInDescendingOrder() {
 		int[] arr = { 0, 1, -1, 0, 1, 0, 1, 1, 1, 0 };
 		int tmp = 0;
 
 		for (int i = 0; i < arr.length; i++) {
 
-			for (int j = i+0; j < arr.length; j++) {
+			for (int j = i + 0; j < arr.length; j++) {
 
 				if (arr[i] < arr[j]) {
 					tmp = arr[i];
@@ -511,43 +512,44 @@ public class AllLogicalProgramms {
 //	}
 	@Test
 	private void reverseAlternateWordFromGivenStringOriginal() {
-	    String given = "my name is ganesh kumar"; // Expected output: my_eman_is_hsenag_kumar
+		String given = "my name is ganesh kumar"; // Expected output: my_eman_is_hsenag_kumar
 
-	    // Split the string by underscore
-	    String[] split = given.split(" ");
-	    String result = "";
+		// Split the string by underscore
+		String[] split = given.split(" ");
+		String result = "";
 
-	    for (int i = 0; i < split.length; i++) {
-	        if (i % 2 != 0) {
-	            // Reverse the string manually
-	            String answer = "";
-	            for (int j = split[i].length() - 1; j >= 0; j--) {
-	            	char c=split[i].charAt(j);
-	            	answer = answer+c;
-	            }
-	            result = result+ answer+" ";
-	        } else {
-	            // Append the word as is
-	            result =result+ split[i]+" ";
-	        }
-	      
-	    }
+		for (int i = 0; i < split.length; i++) {
+			if (i % 2 != 0) {
+				// Reverse the string manually
+				String answer = "";
+				for (int j = split[i].length() - 1; j >= 0; j--) {
+					char c = split[i].charAt(j);
+					answer = answer + c;
+				}
+				result = result + answer + " ";
+			} else {
+				// Append the word as is
+				result = result + split[i] + " ";
+			}
 
-	    // Print the final result
-	    System.out.println(result);
+		}
+
+		// Print the final result
+		System.out.println(result);
 	}
+
 	@Test
 	private void reverseGivenLongStringWithSpace() {
-		String given ="I love India.I work in IT MNC.I work in IT wipro";
-	    String ans = "";
-	    String[] splits=given.split("\\.");
-	    for(int i=splits.length-1;i>=0;i--){
-	      ans = ans+splits[i];
-	      if(i!=0){
-	        ans = ans+".";
-	      }
-	    }
-	    System.out.println(ans);
+		String given = "I love India.I work in IT MNC.I work in IT wipro";
+		String ans = "";
+		String[] splits = given.split("\\.");
+		for (int i = splits.length - 1; i >= 0; i--) {
+			ans = ans + splits[i];
+			if (i != 0) {
+				ans = ans + ".";
+			}
+		}
+		System.out.println(ans);
 	}
 
 	// 21
@@ -898,7 +900,7 @@ public class AllLogicalProgramms {
 			for (int j = i + 1; j < c.length; j++) {
 				if (c[i] == c[j]) {
 					System.out.println(c[i]);
-					
+
 				}
 			}
 		}
@@ -935,7 +937,7 @@ public class AllLogicalProgramms {
 				map.put(c, 1);
 			}
 		}
-		
+
 		Integer max = Collections.max(map.values());
 		Set<Entry<Character, Integer>> entrySet = map.entrySet();
 		for (Entry<Character, Integer> entry : entrySet) {
@@ -995,9 +997,9 @@ public class AllLogicalProgramms {
 
 	private void findtheOccurancecountsofindividualcharacter() {// 21
 		String s = "JaVA123@oracle.com*ismyDefaultemailIdforGIT&jirainMYproJect9840";
-		
-		int [] given = {1,2,4,6,7};
-		
+
+		int[] given = { 1, 2, 4, 6, 7 };
+
 		Map<Character, Integer> map = new LinkedHashMap<>();
 		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
@@ -1009,7 +1011,7 @@ public class AllLogicalProgramms {
 			}
 		}
 		System.out.println(map);
-		
+
 		System.out.println("************************************************");
 
 		int[] given1 = { 1, 2, 4, 6, 7 };
@@ -1087,30 +1089,53 @@ public class AllLogicalProgramms {
 		System.out.println("search char is  " + search + "  repeated time is  " + count);
 	}
 
+//	@Test
+//	private void getCharacterWithRepeatedCountAsASameString() {
+//		String given = "abbcccdddeeee";// a1b2c3d3e4
+//		String result = "";
+//		int count = 1;
+//
+//		for (int i = 0; i < given.length() - 1; i++) {
+//
+//			if (given.charAt(i) == given.charAt(i + 1)) {
+//				count++;
+//			} else {
+//
+//				result = result + given.charAt(i) + Integer.toString(count);
+//				count = 1;
+//			}
+//		}
+//		result = result + given.charAt(given.length() - 1) + Integer.toString(count);
+//
+//		System.out.println(result);
+//	}
+
 	@Test
-	private void getCharacterWithRepeatedCountAsASameString() {
-
-		String given = "abbcccdddeeee";// a1b2c3d3e4
-		String result = "";
-		int count = 1;
-
-		for (int i = 0; i < given.length() - 1; i++) {
-
-			if (given.charAt(i) == given.charAt(i + 1)) {
-				count++;
-			} else {
-
-				result = result + given.charAt(i) + Integer.toString(count);
-				count = 1;
+	private void method() {
+		String name = "adbccbdacb";
+		String res = "";
+		for (int i = 0; i < name.length(); i++) {
+			char currentChar = name.charAt(i);
+			if (currentChar == ' ') {
+				continue; // Skip already processed characters (replaced with spaces)
 			}
+			int count = 1;
+			for (int j = i + 1; j < name.length(); j++) {
+				if (currentChar == name.charAt(j)) {
+					count++;
+					name = name.substring(0, j) + " " + name.substring(j + 1);
+					// Replace with space for already matched character
+					// By replacing the character with a space, the string length remains the same,
+					// which avoids complications with index adjustments in the loops.
+				}
+			}
+			res = res + currentChar + Integer.toString(count); // Append character and its count
 		}
-		result = result + given.charAt(given.length() - 1) + Integer.toString(count);
 
-		System.out.println(result);
+		System.out.println(res);
 	}
 
 	public void sortTheMapByValueNotByKey() {
-
 		Map<String, Integer> map = new HashMap<>();
 		map.put("apple", 50);
 		map.put("banana", 20);
@@ -1139,8 +1164,9 @@ public class AllLogicalProgramms {
 			System.out.println(entry.getKey() + ": " + entry.getValue());
 		}
 	}
-	
-	/////////////////////// character programms ////////////////////////////////////////
+
+	/////////////////////// character programms
+	/////////////////////// ////////////////////////////////////////
 
 	private void validateBelow() {
 		String test = 'a' + "b";
@@ -1828,6 +1854,5 @@ public class AllLogicalProgramms {
 		}
 	}
 ///////////////// additional prograam /////////////
-	
 
 }
