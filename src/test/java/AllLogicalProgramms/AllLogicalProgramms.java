@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 import java.util.Map.Entry;
 
 import org.testng.annotations.Test;
@@ -1035,7 +1036,7 @@ public class AllLogicalProgramms {
 
 	}
 
-	private void findtheOccuranceCountsofEashCasesInString() {// 22
+	private void findtheOccuranceCountsofEachCasesInString() {// 22
 		String s = "JaVA123@oracle.com*ismyDefaultemailIdforGIT&jirainMYproJect9840";
 		int smallCount = 0;
 		int capsCount = 0;
@@ -1110,9 +1111,8 @@ public class AllLogicalProgramms {
 //		System.out.println(result);
 //	}
 
-	@Test
 	private void method() {
-		String name = "aabbbccccdddd";//a2b3c4d4
+		String name = "aabbbccccdddd";// a2b3c4d4
 		String res = "";
 		for (int i = 0; i < name.length(); i++) {
 			char currentChar = name.charAt(i);
@@ -1134,71 +1134,102 @@ public class AllLogicalProgramms {
 
 		System.out.println(res);
 	}
+
 	@Test
 	private void swapPairsFromGivenString() {
-		String given="logical"; // oligacl
+		String given = "logical"; // oligacl
 		String result = "";
-	    char[] chars = given.toCharArray();
+		char[] chars = given.toCharArray();
 
-	    for (int i = 0; i < chars.length - 1; i=i+2) {
-	        char temp = chars[i];
-	        chars[i] = chars[i + 1];
-	        chars[i + 1] = temp;
-	    }
+		for (int i = 0; i < chars.length - 1; i = i + 2) {
+			char temp = chars[i];
+			chars[i] = chars[i + 1];
+			chars[i + 1] = temp;
+		}
 
-	    for (char c : chars) {
-	        result =result+ c;
-	    }
-System.out.println("result "+result);
-	  
+		for (char c : chars) {
+			result = result + c;
+		}
+		System.out.println("result " + result);
+
 	}
 
-    public void findFirstNonRepeatedCharacterFromGivenString() {
-        String input = "aadffggrrtt";
-        Map<Character, Integer> map = new LinkedHashMap<>();
-        for (char c : input.toCharArray()) {
-        	map.put(c, map.getOrDefault(c, 0) + 1);
-        }
-        for (Entry<Character, Integer> entry : map.entrySet()) {
-            if (entry.getValue() == 1) {
-                System.out.println("First non-repeating character: " + entry.getKey());
-                return;
-            }
-        }
-    }
+	public void findFirstNonRepeatedCharacterFromGivenString() {
+		String input = "aadffggrrtt";
+		Map<Character, Integer> map = new LinkedHashMap<>();
+		for (char c : input.toCharArray()) {
+			map.put(c, map.getOrDefault(c, 0) + 1);
+		}
+		for (Entry<Character, Integer> entry : map.entrySet()) {
+			if (entry.getValue() == 1) {
+				System.out.println("First non-repeating character: " + entry.getKey());
+				return;
+			}
+		}
+	}
 
-	public void sortTheMapByValueNotByKey() {
+	@Test
+	private void sortMapByValueUsingStream() {
 		Map<String, Integer> map = new HashMap<>();
 		map.put("apple", 50);
 		map.put("banana", 20);
 		map.put("cherry", 70);
 		map.put("date", 30);
 
-		// Create a list from the map's entry set
-		List<Map.Entry<String, Integer>> entryList = new ArrayList(map.entrySet());
+		// Sort the map by values and collect as a LinkedHashMap
+		Map<String, Integer> sortedMap = map.entrySet().stream().sorted(Map.Entry.comparingByValue())
+				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, // Merge function (not
+																									// needed here)
+						LinkedHashMap::new // Preserve order
+				));
 
-		// Sort the list based on values using a custom comparator
-		Collections.sort(entryList, new Comparator<Map.Entry<String, Integer>>() {
-			@Override
-			public int compare(Map.Entry<String, Integer> entry1, Map.Entry<String, Integer> entry2) {
-				return entry1.getValue().compareTo(entry2.getValue());
+		// Print the sorted map
+		sortedMap.forEach((key, value) -> System.out.println(key + " -> " + value));
+
+	}
+@Test
+	private void sortMapByValueWithoutUsingStream() {
+		Map<String, Integer> map = new HashMap<>();
+		map.put("apple", 50);
+		map.put("banana", 20);
+		map.put("cherry", 70);
+		map.put("date", 30);
+
+//		Entry<String, Integer>[] entries = map.entrySet().toArray(new Entry[0]);
+		
+		/**
+		 * Why new Entry[0] is Preferred:
+Convenience: You don’t need to calculate the size of the collection (map.size()).
+Efficiency: Java handles the array allocation dynamically, ensuring the correct size.
+Readability: new Entry[0] is a common idiom in Java, 
+making the code more recognizable and standard.
+		 */
+		
+		Entry<String, Integer>[] entries = map.entrySet().toArray(new Entry[map.size()]);
+		
+		for(int i=0;i<entries.length;i++) {
+			for(int j=0+i;j<entries.length;j++) {
+				if(entries[i].getValue()>entries[j].getValue()) {
+					Entry<String,Integer> temp =entries[i];
+					entries[i]=entries[j];
+					entries[j]=temp;
+				}
 			}
-		});
+		}
 
-		// Create a LinkedHashMap to store the sorted entries
 		Map<String, Integer> sortedMap = new LinkedHashMap<>();
-		for (Map.Entry<String, Integer> entry : entryList) {
+		
+		for (Entry<String, Integer> entry : entries) {
 			sortedMap.put(entry.getKey(), entry.getValue());
 		}
 
-		// Print the sorted map
-		for (Map.Entry<String, Integer> entry : sortedMap.entrySet()) {
-			System.out.println(entry.getKey() + ": " + entry.getValue());
+		for (Entry<String, Integer> entry : sortedMap.entrySet()) {
+			System.out.println(entry.getKey() + " -> " + entry.getValue());
 		}
+
 	}
 
-	/////////////////////// character programms
-	/////////////////////// ////////////////////////////////////////
+	/////////////////////// character programms ///////////////////////
 
 	private void validateBelow() {
 		String test = 'a' + "b";

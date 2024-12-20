@@ -1,6 +1,8 @@
 package Practice;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -8,25 +10,37 @@ import java.util.Set;
 import org.testng.annotations.Test;
 
 public class Logical {
+
 	@Test
-	private void method() {
-		String name = "marakkanamam";
-		String res="";
-		int count=0;
-		for (int i = 0; i < name.length() ; i++) {
-			for(int j=0;j<count;j++) {
-				if(name.charAt(i)==name.charAt(j)) {
-					count++;
-				}
-				else {
-					res=res+name.charAt(i)+Integer.toString(count);
-					count=1;
+	public static void method() {
+
+		Map<String, Integer> map = new HashMap();
+		map.put("apple", 50);
+		map.put("banana", 20);
+		map.put("cherry", 70);
+		map.put("date", 30);
+
+	Entry<String, Integer>[] entries = map.entrySet().toArray(new Entry[0]);
+		
+		for (int i = 0; i < entries.length - 1; i++) {
+			for (int j = 0; j < entries.length - i - 1; j++) {
+				if (entries[j].getValue() > entries[j + 1].getValue()) {
+
+					Entry<String, Integer> temp = entries[j];
+					entries[j] = entries[j + 1];
+					entries[j + 1] = temp;
 				}
 			}
-			res=res+Integer.toString(count);
-
 		}
-		System.out.println(res);
+
+		Map<String, Integer> sortedMap = new LinkedHashMap<>();
+		for (Entry<String, Integer> entry : entries) {
+			sortedMap.put(entry.getKey(), entry.getValue());
+		}
+
+		for (Entry<String, Integer> entry : sortedMap.entrySet()) {
+			System.out.println(entry.getKey() + " -> " + entry.getValue());
+		}
 	}
 
 	@Test
