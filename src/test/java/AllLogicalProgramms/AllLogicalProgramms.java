@@ -1112,7 +1112,7 @@ public class AllLogicalProgramms {
 
 	@Test
 	private void method() {
-		String name = "adbccbdacb";
+		String name = "aabbbccccdddd";//a2b3c4d4
 		String res = "";
 		for (int i = 0; i < name.length(); i++) {
 			char currentChar = name.charAt(i);
@@ -1134,6 +1134,38 @@ public class AllLogicalProgramms {
 
 		System.out.println(res);
 	}
+	@Test
+	private void swapPairsFromGivenString() {
+		String given="logical"; // oligacl
+		String result = "";
+	    char[] chars = given.toCharArray();
+
+	    for (int i = 0; i < chars.length - 1; i=i+2) {
+	        char temp = chars[i];
+	        chars[i] = chars[i + 1];
+	        chars[i + 1] = temp;
+	    }
+
+	    for (char c : chars) {
+	        result =result+ c;
+	    }
+System.out.println("result "+result);
+	  
+	}
+
+    public void findFirstNonRepeatedCharacterFromGivenString() {
+        String input = "aadffggrrtt";
+        Map<Character, Integer> map = new LinkedHashMap<>();
+        for (char c : input.toCharArray()) {
+        	map.put(c, map.getOrDefault(c, 0) + 1);
+        }
+        for (Entry<Character, Integer> entry : map.entrySet()) {
+            if (entry.getValue() == 1) {
+                System.out.println("First non-repeating character: " + entry.getKey());
+                return;
+            }
+        }
+    }
 
 	public void sortTheMapByValueNotByKey() {
 		Map<String, Integer> map = new HashMap<>();
