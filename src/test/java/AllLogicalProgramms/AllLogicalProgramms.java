@@ -1090,26 +1090,26 @@ public class AllLogicalProgramms {
 		System.out.println("search char is  " + search + "  repeated time is  " + count);
 	}
 
-//	@Test
-//	private void getCharacterWithRepeatedCountAsASameString() {
-//		String given = "abbcccdddeeee";// a1b2c3d3e4
-//		String result = "";
-//		int count = 1;
-//
-//		for (int i = 0; i < given.length() - 1; i++) {
-//
-//			if (given.charAt(i) == given.charAt(i + 1)) {
-//				count++;
-//			} else {
-//
-//				result = result + given.charAt(i) + Integer.toString(count);
-//				count = 1;
-//			}
-//		}
-//		result = result + given.charAt(given.length() - 1) + Integer.toString(count);
-//
-//		System.out.println(result);
-//	}
+	@Test
+	private void getCharacterWithRepeatedCountAsASameString() {
+		String given = "abbcccdddeeee";// a1b2c3d3e4
+		String result = "";
+		int count = 1;
+
+		for (int i = 0; i < given.length() - 1; i++) {
+
+			if (given.charAt(i) == given.charAt(i + 1)) {
+				count++;
+			} else {
+
+				result = result + given.charAt(i) + Integer.toString(count);
+				count = 1;
+			}
+		}
+		result = result + given.charAt(given.length() - 1) + Integer.toString(count);
+
+		System.out.println(result);
+	}
 
 	private void method() {
 		String name = "aabbbccccdddd";// a2b3c4d4

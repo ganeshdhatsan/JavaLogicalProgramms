@@ -1,4 +1,4 @@
-package ImportantStringLogicalProgramms;
+package ImportantLogicalProgramms;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -8,6 +8,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
+
+import org.testng.annotations.Test;
 
 public class ImportantStringLogicals {
 
@@ -248,31 +250,67 @@ public class ImportantStringLogicals {
 		System.out.println("specialCharCount " + specialCharCount);
 		System.out.println("numberCount " + numberCount);
 	}
+	@Test
+	private void getCharacterWithRepeatedCountAsASameStringUsingMap() {
+		String given = "aabbcccdddeeeea";// a3b2c3d3e4
+		String result = "";
+		Map<Character,Integer> map = new LinkedHashMap();
+		for(int i=0;i<given.length();i++) {
+			char c = given.charAt(i);
+			map.put(c, map.getOrDefault(c, 0)+1);
+		}
+		Set<Entry<Character, Integer>> set = map.entrySet();
+		for(Entry<Character, Integer> entry:set) {
+			result=result+entry.getKey()+entry.getValue();
+		}
+		System.out.println(result);
+	}
 
-	private void method() {
-		String name = "aabbbccccdddd";// a2b3c4d4
+	private void getCharacterWithRepeatedCountAsASameStringWithoutUsingMap() {
+		String given = "aabbbcccddddc";// a2b3c4d4
 		String res = "";
-		for (int i = 0; i < name.length(); i++) {
-			char currentChar = name.charAt(i);
-			if (currentChar == ' ') {
+		for (int i = 0; i < given.length(); i++) {
+			char c = given.charAt(i);
+			if (c == ' ') {
 				continue; // Skip already processed characters (replaced with spaces)
 			}
 			int count = 1;
-			for (int j = i + 1; j < name.length(); j++) {
-				if (currentChar == name.charAt(j)) {
+			for (int j = i + 1; j < given.length(); j++) {
+				if (c == given.charAt(j)) {
 					count++;
-					name = name.substring(0, j) + " " + name.substring(j + 1);
+					given = given.substring(0, j) + " " + given.substring(j + 1);
 					// Replace with space for already matched character
 					// By replacing the character with a space, the string length remains the same,
 					// which avoids complications with index adjustments in the loops.
 				}
 			}
-			res = res + currentChar + Integer.toString(count); // Append character and its count
+			res = res + c + Integer.toString(count); // Append character and its count
 		}
 
 		System.out.println(res);
 	}
 
+	@Test
+	private void getCharacterWithRepeatedCountAsASameString() {
+		String given = "aabbcccdddeeeea";// a2b2c3d3e4a1
+		String result = "";
+		int count = 1;
+
+		for (int i = 0; i < given.length() - 1; i++) {
+
+			if (given.charAt(i) == given.charAt(i + 1)) {
+				count++;
+			} else {
+
+				result = result + given.charAt(i) + Integer.toString(count);
+				count = 1;
+			}
+		}
+		result = result + given.charAt(given.length() - 1) + Integer.toString(count);
+
+		System.out.println(result);
+	}
+	
 	private void swapPairsFromGivenString() {
 		String given = "logical"; // oligacl
 		String result = "";
